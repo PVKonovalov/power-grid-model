@@ -1,0 +1,67 @@
+{
+  "version": 3,
+  "configurePresets": [
+    {
+      "name": "base",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/${presetName}",
+      "installDir": "${sourceDir}/install/${presetName}",
+      "cacheVariables": {
+        "power_grid_model_DIR": "${sourceDir}/../install/${presetName}/lib/cmake/power_grid_model"
+      },
+      "hidden": true
+    },
+    {
+      "name": "release",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "RelWithDebInfo"
+      },
+      "hidden": true
+    },
+    {
+      "name": "debug",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug"
+      },
+      "hidden": true
+    },
+    {
+      "name": "clang-base",
+      "cacheVariables": {
+        "CMAKE_C_COMPILER": "clang",
+        "CMAKE_CXX_COMPILER": "clang++"
+      },
+      "hidden": true
+    },
+    {
+      "name": "apple-clang-base",
+      "inherits": ["base", "clang-base"],
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Darwin"
+      },
+      "hidden": true
+    },
+    {
+      "name": "apple-clang-debug",
+      "displayName": "Debug (Apple Clang)",
+      "inherits": ["apple-clang-base", "debug"]
+    },
+    {
+      "name": "apple-clang-release",
+      "displayName": "Release (Apple Clang)",
+      "inherits": ["apple-clang-base", "release"]
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "apple-clang-debug",
+      "configurePreset": "apple-clang-debug"
+    },
+    {
+      "name": "apple-clang-release",
+      "configurePreset": "apple-clang-release"
+    }
+  ]
+}

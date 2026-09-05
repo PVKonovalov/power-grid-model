@@ -1,0 +1,242 @@
+// SPDX-FileCopyrightText: Contributors to the Power Grid Model project <powergridmodel@lfenergy.org>
+//
+// SPDX-License-Identifier: MPL-2.0
+
+syntax = "proto3";
+
+// Service definition for power_grid_grpc_server: a gRPC front end for power-grid-model's power flow, state
+// estimation, and short circuit calculations. Request/response payloads carry PGM's own input/output dataset
+// JSON (the same schema used by power_grid_model_c_example/serialization.c) as string fields, rather than
+// mirroring every component/attribute as protobuf messages — see grpc_server/README.md for the full field
+// reference and for the internal/pgmtypes Go package that builds that JSON from typed structs.
+package power_grid_model.v1;
+
+option go_package = "power-grid-model/grpc_client_example/internal/powergridpb;powergridpb";
+
+// The numerical method used to solve a calculation. Shared across power flow and state estimation; only a
+// subset of values is valid for each — see PowerFlowOptions.calculation_method and
+// StateEstimationOptions.calculation_method.
+enum CalculationMethod {
+    // No method chosen: the server picks a default appropriate to the calculation type (Newton-Raphson for
+    // power flow, iterative linear for state estimation).
+    CALCULATION_METHOD_UNSPECIFIED = 0;
+    // Newton-Raphson iterative method. Valid for power flow or state estimation.
+    CALCULATION_METHOD_NEWTON_RAPHSON = 1;
+    // Linear (constant impedance) method. Power flow only.
+    CALCULATION_METHOD_LINEAR = 2;
+    // Iterative current method. Power flow only.
+    CALCULATION_METHOD_ITERATIVE_CURRENT = 3;
+    // Iterative linear method. State estimation only.
+    CALCULATION_METHOD_ITERATIVE_LINEAR = 4;
+}
+
+// Which IEC 60909 voltage factor (c) to use for a short circuit calculation: c_min gives the minimum short
+// circuit current, c_max the maximum.
+enum ShortCircuitVoltageScaling {
+    // No scaling chosen: the server defaults to maximum (c_max).
+    SHORT_CIRCUIT_VOLTAGE_SCALING_UNSPECIFIED = 0;
+    // c_min: minimum short circuit current.
+    SHORT_CIRCUIT_VOLTAGE_SCALING_MINIMUM = 1;
+    // c_max: maximum short circuit current.
+    SHORT_CIRCUIT_VOLTAGE_SCALING_MAXIMUM = 2;
+}
+
+// Options for a power flow calculation (CalculatePowerFlow, UpdateAndCalculatePowerFlow).
+message PowerFlowOptions {
+    // Whether to run a symmetric (true) or asymmetric (false) calculation.
+    //
+    // Unset (false) together with proto3's inability to distinguish "unset" from "false" means the server always
+    // treats this as an explicit choice — the Go client must always set it. See src/power_grid_service.cpp.
+    bool symmetric = 1;
+    // Numerical method to use. CALCULATION_METHOD_UNSPECIFIED defaults to Newton-Raphson; only
+    // CALCULATION_METHOD_NEWTON_RAPHSON, CALCULATION_METHOD_LINEAR, and CALCULATION_METHOD_ITERATIVE_CURRENT are
+    // valid here.
+    CalculationMethod calculation_method = 2;
+    // Convergence tolerance for iterative methods. <= 0 means "use PGM's built-in default".
+    double err_tol = 3;
+    // Maximum number of iterations for iterative methods. <= 0 means "use PGM's built-in default".
+    int32 max_iter = 4;
+}
+
+// Request for CalculatePowerFlow: a complete, self-contained grid to solve once.
+message CalculatePowerFlowRequest {
+    // System frequency in Hz, e.g. 50.0.
+    double system_frequency = 1;
+    // PGM input dataset, PGM's own JSON schema (type "input").
+    string input_dataset_json = 2;
+    // Calculation options.
+    PowerFlowOptions options = 3;
+}
+
+// Response for CalculatePowerFlow and UpdateAndCalculatePowerFlow.
+message CalculatePowerFlowResponse {
+    // PGM sym_output/asym_output dataset JSON (depending on PowerFlowOptions.symmetric).
+    string output_dataset_json = 1;
+}
+
+// Options for a state estimation calculation (CalculateStateEstimation, UpdateAndCalculateStateEstimation).
+message StateEstimationOptions {
+    // Whether to run a symmetric (true) or asymmetric (false) calculation.
+    //
+    // See PowerFlowOptions.symmetric: the Go client must always set this explicitly.
+    bool symmetric = 1;
+    // Numerical method to use. CALCULATION_METHOD_UNSPECIFIED defaults to iterative linear; only
+    // CALCULATION_METHOD_NEWTON_RAPHSON and CALCULATION_METHOD_ITERATIVE_LINEAR are valid here.
+    CalculationMethod calculation_method = 2;
+    // Convergence tolerance for iterative methods. <= 0 means "use PGM's built-in default".
+    double err_tol = 3;
+    // Maximum number of iterations for iterative methods. <= 0 means "use PGM's built-in default".
+    int32 max_iter = 4;
+}
+
+// Request for CalculateStateEstimation: a complete, self-contained grid (including sensor measurements) to
+// solve once.
+message CalculateStateEstimationRequest {
+    // System frequency in Hz, e.g. 50.0.
+    double system_frequency = 1;
+    // PGM input dataset, including sensor components (e.g. sym_voltage_sensor, sym_power_sensor), PGM's own
+    // JSON schema (type "input").
+    string input_dataset_json = 2;
+    // Calculation options.
+    StateEstimationOptions options = 3;
+}
+
+// Response for CalculateStateEstimation and UpdateAndCalculateStateEstimation.
+message CalculateStateEstimationResponse {
+    // PGM sym_output/asym_output dataset JSON (depending on StateEstimationOptions.symmetric).
+    string output_dataset_json = 1;
+}
+
+// Options for a short circuit calculation (CalculateShortCircuit, UpdateAndCalculateShortCircuit). There is no
+// calculation_method option here: IEC 60909 (CALCULATION_METHOD_UNSPECIFIED's implied default) is the only
+// method PGM supports for short circuit.
+message ShortCircuitOptions {
+    // Which IEC 60909 voltage factor to use. SHORT_CIRCUIT_VOLTAGE_SCALING_UNSPECIFIED defaults to maximum.
+    ShortCircuitVoltageScaling voltage_scaling = 1;
+}
+
+// Request for CalculateShortCircuit: a complete, self-contained grid (including at least one fault) to solve
+// once.
+message CalculateShortCircuitRequest {
+    // System frequency in Hz, e.g. 50.0.
+    double system_frequency = 1;
+    // PGM input dataset, including a fault component, PGM's own JSON schema (type "input").
+    string input_dataset_json = 2;
+    // Calculation options.
+    ShortCircuitOptions options = 3;
+}
+
+// Response for CalculateShortCircuit and UpdateAndCalculateShortCircuit.
+message CalculateShortCircuitResponse {
+    // PGM sc_output dataset JSON. Always per-phase (a/b/c), even for a symmetrical (three-phase) fault.
+    string output_dataset_json = 1;
+}
+
+// --- Stateful model session API -------------------------------------------------------------------------------
+//
+// The Calculate* RPCs above are fully stateless: every call parses a complete input dataset, builds a model,
+// solves it, and discards the model. That's fine for periodic/batch use, but for "real-time" use (e.g. pushing
+// SCADA load updates or a tap change every few seconds and recalculating) it means redoing topology/Y-bus
+// construction on every single call even though only a handful of attribute values actually changed.
+//
+// CreateModel keeps a PGM model alive in server memory, keyed by model_id. UpdateAndCalculate* pushes a partial
+// *update* dataset (only the changed component IDs/attributes; PGM_update_model — see
+// power_grid_model_cpp::Model::update) onto that existing model and recalculates, without rebuilding topology
+// unless a topology-affecting attribute (e.g. from_status/to_status) actually changed; PGM detects that
+// internally. update_dataset_json may be empty to recalculate without changing anything (e.g. a plain re-poll).
+//
+// model_id is only a server-memory key: it does not survive a server restart, is not authenticated, and is
+// never garbage-collected — call DestroyModel when a session is done, or it leaks for the life of the process.
+// A given model_id's calls are internally serialized (the server locks per-model), so concurrent
+// UpdateAndCalculate* calls against the *same* model_id queue up; different model_ids run fully in parallel.
+
+// Request for CreateModel: a complete, self-contained grid to build a long-lived model from.
+message CreateModelRequest {
+    // System frequency in Hz, e.g. 50.0.
+    double system_frequency = 1;
+    // PGM input dataset, PGM's own JSON schema (type "input").
+    string input_dataset_json = 2;
+}
+
+// Response for CreateModel.
+message CreateModelResponse {
+    // Server-generated key for the created model; pass this to UpdateAndCalculate*/DestroyModel. See the
+    // "Stateful model session API" note above for its caveats (not authenticated, no expiry).
+    string model_id = 1;
+}
+
+// Request for DestroyModel.
+message DestroyModelRequest {
+    // The model_id previously returned by CreateModel.
+    string model_id = 1;
+}
+
+// Response for DestroyModel. Always empty; success is indicated by the RPC status (NOT_FOUND if model_id
+// doesn't exist).
+message DestroyModelResponse {}
+
+// Request for UpdateAndCalculatePowerFlow.
+message UpdateAndCalculatePowerFlowRequest {
+    // The model_id previously returned by CreateModel.
+    string model_id = 1;
+    // PGM update dataset JSON (type "update"): only the component IDs/attributes that changed since the model
+    // was created or last updated. May be empty to recalculate without changing anything.
+    string update_dataset_json = 2;
+    // Calculation options.
+    PowerFlowOptions options = 3;
+}
+
+// Request for UpdateAndCalculateStateEstimation.
+message UpdateAndCalculateStateEstimationRequest {
+    // The model_id previously returned by CreateModel.
+    string model_id = 1;
+    // PGM update dataset JSON (type "update"): only the component IDs/attributes that changed since the model
+    // was created or last updated (e.g. a new sensor measurement). May be empty to recalculate without
+    // changing anything.
+    string update_dataset_json = 2;
+    // Calculation options.
+    StateEstimationOptions options = 3;
+}
+
+// Request for UpdateAndCalculateShortCircuit.
+message UpdateAndCalculateShortCircuitRequest {
+    // The model_id previously returned by CreateModel.
+    string model_id = 1;
+    // PGM update dataset JSON (type "update"): only the component IDs/attributes that changed since the model
+    // was created or last updated (e.g. a fault being toggled active). May be empty to recalculate without
+    // changing anything.
+    string update_dataset_json = 2;
+    // Calculation options.
+    ShortCircuitOptions options = 3;
+}
+
+// PowerGridService exposes power-grid-model calculations over gRPC. See src/power_grid_service.{hpp,cpp} for
+// the server implementation and grpc_server/README.md for usage examples (grpcurl, Go clients).
+service PowerGridService {
+    // Runs a one-off power flow calculation against a complete input dataset (symmetric or asymmetric) and
+    // returns the sym_output/asym_output dataset.
+    rpc CalculatePowerFlow(CalculatePowerFlowRequest) returns (CalculatePowerFlowResponse);
+    // Runs a one-off state estimation calculation against a complete input dataset (including sensor
+    // components) and returns the sym_output/asym_output dataset.
+    rpc CalculateStateEstimation(CalculateStateEstimationRequest) returns (CalculateStateEstimationResponse);
+    // Runs a one-off IEC 60909 short circuit calculation against a complete input dataset (including at least
+    // one fault) and returns the sc_output dataset (always per-phase a/b/c).
+    rpc CalculateShortCircuit(CalculateShortCircuitRequest) returns (CalculateShortCircuitResponse);
+
+    // Builds a model from a complete input dataset and keeps it alive in server memory, returning a model_id
+    // for use by the UpdateAndCalculate*/DestroyModel RPCs below. See the "Stateful model session API" note
+    // above. The model has no expiry; call DestroyModel when done with it.
+    rpc CreateModel(CreateModelRequest) returns (CreateModelResponse);
+    // Removes and frees the model for model_id. NOT_FOUND if it doesn't exist. Safe to call even while a call
+    // against that model_id is in flight elsewhere.
+    rpc DestroyModel(DestroyModelRequest) returns (DestroyModelResponse);
+    // Applies an (optionally empty) update dataset to an existing model, runs a power flow calculation, and
+    // returns the result — without rebuilding topology from scratch. NOT_FOUND if model_id doesn't exist.
+    rpc UpdateAndCalculatePowerFlow(UpdateAndCalculatePowerFlowRequest) returns (CalculatePowerFlowResponse);
+    // As UpdateAndCalculatePowerFlow, but runs a state estimation calculation. NOT_FOUND if model_id doesn't
+    // exist.
+    rpc UpdateAndCalculateStateEstimation(UpdateAndCalculateStateEstimationRequest) returns (CalculateStateEstimationResponse);
+    // As UpdateAndCalculatePowerFlow, but runs an IEC 60909 short circuit calculation. NOT_FOUND if model_id
+    // doesn't exist.
+    rpc UpdateAndCalculateShortCircuit(UpdateAndCalculateShortCircuitRequest) returns (CalculateShortCircuitResponse);
+}

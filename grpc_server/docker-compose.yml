@@ -1,0 +1,17 @@
+# SPDX-FileCopyrightText: Contributors to the Power Grid Model project <powergridmodel@lfenergy.org>
+#
+# SPDX-License-Identifier: MPL-2.0
+
+services:
+  power-grid-grpc-server:
+    build:
+      context: ..
+      dockerfile: grpc_server/Dockerfile
+    ports:
+      - "50051:50051"
+    environment:
+      GRPC_PORT: "50051"
+      GRPC_SHUTDOWN_TIMEOUT_SECONDS: "10"
+    # HEALTHCHECK is already baked into the image (see Dockerfile); restart:unless-stopped pairs with it so an
+    # orchestrator (here, just the Docker daemon) restarts the container if it ever crashes or hangs.
+    restart: unless-stopped
