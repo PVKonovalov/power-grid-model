@@ -1,0 +1,597 @@
+{
+  "version": "1.0",
+  "type": "input",
+  "is_batch": false,
+  "attributes": {},
+  "data": {
+    "node": [
+      {
+        "id": 66,
+        "u_rated": 13800
+      },
+      {
+        "id": 1,
+        "u_rated": 16500
+      },
+      {
+        "id": 64,
+        "u_rated": 230000
+      },
+      {
+        "id": 44,
+        "u_rated": 230000
+      },
+      {
+        "id": 10,
+        "u_rated": 230000
+      },
+      {
+        "id": 33,
+        "u_rated": 230000
+      },
+      {
+        "id": 42,
+        "u_rated": 230000
+      },
+      {
+        "id": 8,
+        "u_rated": 230000
+      },
+      {
+        "id": 9,
+        "u_rated": 230000
+      },
+      {
+        "id": 17,
+        "u_rated": 16500
+      },
+      {
+        "id": 38,
+        "u_rated": 230000
+      },
+      {
+        "id": 3,
+        "u_rated": 13800
+      },
+      {
+        "id": 68,
+        "u_rated": 230000
+      },
+      {
+        "id": 70,
+        "u_rated": 230000
+      },
+      {
+        "id": 14,
+        "u_rated": 13800
+      },
+      {
+        "id": 26,
+        "u_rated": 230000
+      },
+      {
+        "id": 29,
+        "u_rated": 230000
+      },
+      {
+        "id": 41,
+        "u_rated": 230000
+      },
+      {
+        "id": 62,
+        "u_rated": 18000
+      },
+      {
+        "id": 2,
+        "u_rated": 18000
+      },
+      {
+        "id": 4,
+        "u_rated": 230000
+      },
+      {
+        "id": 5,
+        "u_rated": 230000
+      },
+      {
+        "id": 7,
+        "u_rated": 230000
+      },
+      {
+        "id": 20,
+        "u_rated": 230000
+      },
+      {
+        "id": 23,
+        "u_rated": 230000
+      },
+      {
+        "id": 30,
+        "u_rated": 230000
+      },
+      {
+        "id": 45,
+        "u_rated": 230000
+      },
+      {
+        "id": 35,
+        "u_rated": 230000
+      },
+      {
+        "id": 36,
+        "u_rated": 230000
+      },
+      {
+        "id": 72,
+        "u_rated": 16500
+      },
+      {
+        "id": 11,
+        "u_rated": 18000
+      },
+      {
+        "id": 32,
+        "u_rated": 230000
+      },
+      {
+        "id": 39,
+        "u_rated": 230000
+      }
+    ],
+    "line": [
+      {
+        "id": 31,
+        "from_node": 29,
+        "to_node": 30,
+        "from_status": 1,
+        "to_status": 1,
+        "r1": 6.2951,
+        "x1": 53.3232,
+        "c1": 6.29e-07,
+        "tan1": 0,
+        "r0": 18.8853,
+        "x0": 159.9696,
+        "c0": 3.145e-07,
+        "tan0": 0,
+        "i_n": 1200
+      },
+      {
+        "id": 34,
+        "from_node": 32,
+        "to_node": 33,
+        "from_status": 1,
+        "to_status": 1,
+        "r1": 4.4965,
+        "x1": 38.088,
+        "c1": 4.48e-07,
+        "tan1": 0,
+        "r0": 13.4895,
+        "x0": 114.264,
+        "c0": 2.24e-07,
+        "tan0": 0,
+        "i_n": 1200
+      },
+      {
+        "id": 37,
+        "from_node": 35,
+        "to_node": 36,
+        "from_status": 1,
+        "to_status": 1,
+        "r1": 20.631,
+        "x1": 89.93,
+        "c1": 1.08e-06,
+        "tan1": 0,
+        "r0": 61.893,
+        "x0": 269.79,
+        "c0": 5.4e-07,
+        "tan0": 0,
+        "i_n": 1200
+      },
+      {
+        "id": 40,
+        "from_node": 38,
+        "to_node": 39,
+        "from_status": 1,
+        "to_status": 1,
+        "r1": 16.928,
+        "x1": 85.169,
+        "c1": 9.21e-07,
+        "tan1": 0,
+        "r0": 50.784,
+        "x0": 255.507,
+        "c0": 4.605e-07,
+        "tan0": 0,
+        "i_n": 1200
+      },
+      {
+        "id": 43,
+        "from_node": 41,
+        "to_node": 42,
+        "from_status": 1,
+        "to_status": 1,
+        "r1": 8.993,
+        "x1": 48.668,
+        "c1": 4.75e-07,
+        "tan1": 0,
+        "r0": 26.979,
+        "x0": 146.004,
+        "c0": 2.375e-07,
+        "tan0": 0,
+        "i_n": 1200
+      },
+      {
+        "id": 46,
+        "from_node": 44,
+        "to_node": 45,
+        "from_status": 1,
+        "to_status": 1,
+        "r1": 8.993,
+        "x1": 48.668,
+        "c1": 4.75e-07,
+        "tan1": 0,
+        "r0": 26.979,
+        "x0": 146.004,
+        "c0": 2.375e-07,
+        "tan0": 0,
+        "i_n": 1200
+      }
+    ],
+    "link": [
+      {
+        "id": 47,
+        "from_node": 11,
+        "to_node": 2,
+        "from_status": 0,
+        "to_status": 0
+      },
+      {
+        "id": 48,
+        "from_node": 3,
+        "to_node": 14,
+        "from_status": 0,
+        "to_status": 0
+      },
+      {
+        "id": 49,
+        "from_node": 1,
+        "to_node": 17,
+        "from_status": 1,
+        "to_status": 1
+      },
+      {
+        "id": 50,
+        "from_node": 8,
+        "to_node": 32,
+        "from_status": 1,
+        "to_status": 1
+      },
+      {
+        "id": 51,
+        "from_node": 32,
+        "to_node": 9,
+        "from_status": 1,
+        "to_status": 1
+      },
+      {
+        "id": 52,
+        "from_node": 29,
+        "to_node": 10,
+        "from_status": 1,
+        "to_status": 1
+      },
+      {
+        "id": 53,
+        "from_node": 29,
+        "to_node": 9,
+        "from_status": 1,
+        "to_status": 1
+      },
+      {
+        "id": 54,
+        "from_node": 8,
+        "to_node": 38,
+        "from_status": 1,
+        "to_status": 1
+      },
+      {
+        "id": 55,
+        "from_node": 39,
+        "to_node": 5,
+        "from_status": 1,
+        "to_status": 1
+      },
+      {
+        "id": 56,
+        "from_node": 10,
+        "to_node": 35,
+        "from_status": 1,
+        "to_status": 1
+      },
+      {
+        "id": 57,
+        "from_node": 36,
+        "to_node": 7,
+        "from_status": 1,
+        "to_status": 1
+      },
+      {
+        "id": 58,
+        "from_node": 5,
+        "to_node": 41,
+        "from_status": 1,
+        "to_status": 1
+      },
+      {
+        "id": 59,
+        "from_node": 42,
+        "to_node": 4,
+        "from_status": 1,
+        "to_status": 1
+      },
+      {
+        "id": 60,
+        "from_node": 7,
+        "to_node": 44,
+        "from_status": 1,
+        "to_status": 1
+      },
+      {
+        "id": 61,
+        "from_node": 45,
+        "to_node": 4,
+        "from_status": 1,
+        "to_status": 1
+      },
+      {
+        "id": 63,
+        "from_node": 2,
+        "to_node": 62,
+        "from_status": 1,
+        "to_status": 1
+      },
+      {
+        "id": 65,
+        "from_node": 64,
+        "to_node": 8,
+        "from_status": 1,
+        "to_status": 1
+      },
+      {
+        "id": 67,
+        "from_node": 66,
+        "to_node": 3,
+        "from_status": 1,
+        "to_status": 1
+      },
+      {
+        "id": 69,
+        "from_node": 10,
+        "to_node": 68,
+        "from_status": 1,
+        "to_status": 1
+      },
+      {
+        "id": 71,
+        "from_node": 4,
+        "to_node": 70,
+        "from_status": 1,
+        "to_status": 1
+      },
+      {
+        "id": 73,
+        "from_node": 72,
+        "to_node": 1,
+        "from_status": 1,
+        "to_status": 1
+      },
+      {
+        "id": 74,
+        "from_node": 9,
+        "to_node": 20,
+        "from_status": 1,
+        "to_status": 1
+      },
+      {
+        "id": 75,
+        "from_node": 5,
+        "to_node": 23,
+        "from_status": 1,
+        "to_status": 1
+      },
+      {
+        "id": 76,
+        "from_node": 7,
+        "to_node": 26,
+        "from_status": 1,
+        "to_status": 1
+      }
+    ],
+    "transformer": [
+      {
+        "id": 77,
+        "from_node": 62,
+        "to_node": 64,
+        "from_status": 1,
+        "to_status": 1,
+        "u1": 18000,
+        "u2": 230000,
+        "sn": 100000000,
+        "uk": 0.101875,
+        "pk": 0,
+        "i0": 0,
+        "p0": 0,
+        "winding_from": 0,
+        "winding_to": 1,
+        "clock": 0,
+        "tap_side": 0,
+        "tap_min": -2,
+        "tap_max": 2,
+        "tap_size": 0
+      },
+      {
+        "id": 78,
+        "from_node": 66,
+        "to_node": 68,
+        "from_status": 1,
+        "to_status": 1,
+        "u1": 13800,
+        "u2": 230000,
+        "sn": 86000000,
+        "uk": 0.050396,
+        "pk": 0,
+        "i0": 0,
+        "p0": 0,
+        "winding_from": 0,
+        "winding_to": 1,
+        "clock": 0,
+        "tap_side": 0,
+        "tap_min": -2,
+        "tap_max": 2,
+        "tap_size": 0
+      },
+      {
+        "id": 79,
+        "from_node": 72,
+        "to_node": 70,
+        "from_status": 1,
+        "to_status": 1,
+        "u1": 16500,
+        "u2": 230000,
+        "sn": 77000000,
+        "uk": 0.044352,
+        "pk": 0,
+        "i0": 0,
+        "p0": 0,
+        "winding_from": 0,
+        "winding_to": 1,
+        "clock": 0,
+        "tap_side": 0,
+        "tap_min": -2,
+        "tap_max": 2,
+        "tap_size": 0
+      }
+    ],
+    "sym_load": [
+      {
+        "id": 21,
+        "node": 20,
+        "status": 1,
+        "type": 1,
+        "p_specified": 100000000,
+        "q_specified": 35000000
+      },
+      {
+        "id": 24,
+        "node": 23,
+        "status": 1,
+        "type": 1,
+        "p_specified": 125000000,
+        "q_specified": 50000000
+      },
+      {
+        "id": 27,
+        "node": 26,
+        "status": 1,
+        "type": 1,
+        "p_specified": 90000000,
+        "q_specified": 30000000
+      }
+    ],
+    "source": [
+      {
+        "id": 12,
+        "node": 11,
+        "status": 1,
+        "u_ref": 1,
+        "sk": 2000000000,
+        "rx_ratio": 0.1
+      },
+      {
+        "id": 15,
+        "node": 14,
+        "status": 1,
+        "u_ref": 1,
+        "sk": 2000000000,
+        "rx_ratio": 0.1
+      },
+      {
+        "id": 18,
+        "node": 17,
+        "status": 1,
+        "u_ref": 1,
+        "sk": 2000000000,
+        "rx_ratio": 0.1
+      }
+    ],
+    "sym_voltage_sensor": [
+      {
+        "id": 6,
+        "measured_object": 5,
+        "u_sigma": 100,
+        "u_measured": 182000
+      },
+      {
+        "id": 80,
+        "measured_object": 11,
+        "u_sigma": 100,
+        "u_measured": 18000
+      },
+      {
+        "id": 81,
+        "measured_object": 14,
+        "u_sigma": 100,
+        "u_measured": 13800
+      }
+    ],
+    "sym_power_sensor": [
+      {
+        "id": 13,
+        "measured_object": 12,
+        "measured_terminal_type": 2,
+        "power_sigma": 1630760,
+        "p_measured": 163000000,
+        "q_measured": 5000000
+      },
+      {
+        "id": 16,
+        "measured_object": 15,
+        "measured_terminal_type": 2,
+        "power_sigma": 857080,
+        "p_measured": 85000000,
+        "q_measured": -11000000
+      },
+      {
+        "id": 19,
+        "measured_object": 18,
+        "measured_terminal_type": 2,
+        "power_sigma": 772650,
+        "p_measured": 72000000,
+        "q_measured": 28000000
+      },
+      {
+        "id": 22,
+        "measured_object": 21,
+        "measured_terminal_type": 4,
+        "power_sigma": 1059480,
+        "p_measured": 100000000,
+        "q_measured": 35000000
+      },
+      {
+        "id": 25,
+        "measured_object": 24,
+        "measured_terminal_type": 4,
+        "power_sigma": 1346290,
+        "p_measured": 125000000,
+        "q_measured": 50000000
+      },
+      {
+        "id": 28,
+        "measured_object": 27,
+        "measured_terminal_type": 4,
+        "power_sigma": 948680,
+        "p_measured": 90000000,
+        "q_measured": 30000000
+      }
+    ]
+  }
+}
