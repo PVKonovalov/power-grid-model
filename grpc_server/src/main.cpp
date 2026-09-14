@@ -27,7 +27,7 @@ extern "C" void request_shutdown(int /*signal*/) { g_shutdown_requested.store(tr
 
 // Reads GRPC_PORT (default 50051) and returns "0.0.0.0:<port>".
 std::string server_address() {
-    std::string port = "50051";
+    std::string port = "50052";
     if (char const* env_port = std::getenv("GRPC_PORT"); env_port != nullptr) {
         port = env_port;
     }
