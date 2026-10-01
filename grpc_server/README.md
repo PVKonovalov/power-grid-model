@@ -445,6 +445,14 @@ side within a band. Type name: `transformer_tap_regulator`. Go: `pgmtypes.Transf
 | `u_band`                       | `UBand`                      | `float64` | volt (V) | only for power flow        | Width of the voltage band. Must be > 0. |
 | `line_drop_compensation_r`/`x` | `LineDropCompensationR`/`X`  | `float64` | ohm (Ω)  | no, default `0.0`          | Compensation for voltage drop due to resistance/reactance during transport. Must be >= 0. |
 
+A regulator only takes effect in power flow, and only when the request's `PowerFlowOptions.tap_changing_strategy`
+is set to something other than `TAP_CHANGING_STRATEGY_DISABLED` (the default — PGM then ignores every regulator
+and uses each transformer's own `tap_pos`). The other values mirror PGM's `TapChangingStrategy`:
+`TAP_CHANGING_STRATEGY_ANY_VALID_TAP`, `..._MIN_VOLTAGE_TAP`, `..._MAX_VOLTAGE_TAP`, `..._FAST_ANY_TAP`. The optimal
+tap position comes back in the output's `transformer_tap_regulator[].tap_pos` (absent when the regulator isn't
+energized); every other output is calculated at that position. PGM rejects a non-disabled strategy for state
+estimation/short circuit, which is why only `PowerFlowOptions` carries it.
+
 ### Voltage Regulator
 
 Defines voltage control for a regulated load/generator: an active regulator makes its node a voltage-controlled

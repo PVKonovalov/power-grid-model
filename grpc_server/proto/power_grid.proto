@@ -41,6 +41,23 @@ enum ShortCircuitVoltageScaling {
     SHORT_CIRCUIT_VOLTAGE_SCALING_MAXIMUM = 2;
 }
 
+// Automatic tap changing strategy for a power flow calculation — mirrors PGM_TapChangingStrategy. Only takes
+// effect for transformers regulated by a transformer_tap_regulator component in the input dataset; with
+// TAP_CHANGING_STRATEGY_DISABLED (the default) PGM ignores every regulator and uses each transformer's own
+// tap_pos as-is. See docs/user_manual/components.md's "Transformer tap regulator".
+enum TapChangingStrategy {
+    // No automatic tap adjustment.
+    TAP_CHANGING_STRATEGY_DISABLED = 0;
+    // Adjust taps automatically; any tap position within the voltage band is acceptable.
+    TAP_CHANGING_STRATEGY_ANY_VALID_TAP = 1;
+    // Adjust taps automatically; optimize for the lower end of the voltage band.
+    TAP_CHANGING_STRATEGY_MIN_VOLTAGE_TAP = 2;
+    // Adjust taps automatically; optimize for the higher end of the voltage band.
+    TAP_CHANGING_STRATEGY_MAX_VOLTAGE_TAP = 3;
+    // Adjust taps automatically; any valid tap, using a faster search.
+    TAP_CHANGING_STRATEGY_FAST_ANY_TAP = 4;
+}
+
 // Options for a power flow calculation (CalculatePowerFlow, UpdateAndCalculatePowerFlow).
 message PowerFlowOptions {
     // Whether to run a symmetric (true) or asymmetric (false) calculation.
@@ -56,6 +73,10 @@ message PowerFlowOptions {
     double err_tol = 3;
     // Maximum number of iterations for iterative methods. <= 0 means "use PGM's built-in default".
     int32 max_iter = 4;
+    // Automatic tap changing strategy. TAP_CHANGING_STRATEGY_DISABLED (unset) ignores every
+    // transformer_tap_regulator in the input dataset. The optimal tap positions are reported in the output's
+    // transformer_tap_regulator.tap_pos; every other output is calculated at those positions.
+    TapChangingStrategy tap_changing_strategy = 5;
 }
 
 // Request for CalculatePowerFlow: a complete, self-contained grid to solve once.

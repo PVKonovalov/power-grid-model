@@ -12,3 +12,12 @@ reference state estimation requires). Wired the new executable into
 `power_grid_model_c_example/CMakeLists.txt` alongside the existing examples, registered as ctest
 `PGMExampleStateEstimation`, and verified it builds warning-free and passes under the `apple-clang-debug`
 preset.
+
+2026-10-01: Added automatic tap changing to the gRPC server: a `TapChangingStrategy` enum and
+`PowerFlowOptions.tap_changing_strategy` field (`grpc_server/proto/power_grid.proto`), mapped onto PGM's own
+`PGM_TapChangingStrategy` via `Options::set_tap_changing_strategy` in both `CalculatePowerFlow` and
+`UpdateAndCalculatePowerFlow` (`grpc_server/src/power_grid_service.cpp`). Unset/`TAP_CHANGING_STRATEGY_DISABLED`
+keeps the previous behaviour (every `transformer_tap_regulator` ignored). Documented under the README's
+Transformer Tap Regulator section. Verified natively: a 110/10.5 kV transformer with a regulator
+(`u_set` 10.5 kV, `u_band` 300 V) solves at 0.956 pu with the strategy disabled and at 0.995 pu (optimal
+`tap_pos` -2) with `TAP_CHANGING_STRATEGY_ANY_VALID_TAP`.

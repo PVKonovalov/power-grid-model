@@ -63,6 +63,24 @@ map_short_circuit_voltage_scaling(power_grid_model::v1::ShortCircuitVoltageScali
     }
 }
 
+// Maps the proto TapChangingStrategy to its PGM_TapChangingStrategy counterpart, defaulting to disabled for
+// unknown values.
+power_grid_model_cpp::Idx map_tap_changing_strategy(power_grid_model::v1::TapChangingStrategy strategy) {
+    switch (strategy) {
+    case power_grid_model::v1::TAP_CHANGING_STRATEGY_ANY_VALID_TAP:
+        return PGM_tap_changing_strategy_any_valid_tap;
+    case power_grid_model::v1::TAP_CHANGING_STRATEGY_MIN_VOLTAGE_TAP:
+        return PGM_tap_changing_strategy_min_voltage_tap;
+    case power_grid_model::v1::TAP_CHANGING_STRATEGY_MAX_VOLTAGE_TAP:
+        return PGM_tap_changing_strategy_max_voltage_tap;
+    case power_grid_model::v1::TAP_CHANGING_STRATEGY_FAST_ANY_TAP:
+        return PGM_tap_changing_strategy_fast_any_tap;
+    case power_grid_model::v1::TAP_CHANGING_STRATEGY_DISABLED:
+    default:
+        return PGM_tap_changing_strategy_disabled;
+    }
+}
+
 // Counts "node" elements and elements of every two-/three-terminal branch component type in dataset_info, for
 // the calculation-size log line below. Every input component type PGM supports is one of: node, a branch
 // (line/asym_line/link/generic_branch/transformer), a branch3 (three_winding_transformer), an appliance
@@ -202,6 +220,7 @@ grpc::Status PowerGridServiceImpl::CalculatePowerFlow(grpc::ServerContext* /*con
         options.set_calculation_type(PGM_power_flow);
         options.set_symmetric(sym ? PGM_symmetric : PGM_asymmetric);
         options.set_calculation_method(map_power_flow_method(request->options().calculation_method()));
+        options.set_tap_changing_strategy(map_tap_changing_strategy(request->options().tap_changing_strategy()));
         if (request->options().err_tol() > 0.0) {
             options.set_err_tol(request->options().err_tol());
         }
@@ -391,6 +410,7 @@ grpc::Status PowerGridServiceImpl::UpdateAndCalculatePowerFlow(
         options.set_calculation_type(PGM_power_flow);
         options.set_symmetric(sym ? PGM_symmetric : PGM_asymmetric);
         options.set_calculation_method(map_power_flow_method(request->options().calculation_method()));
+        options.set_tap_changing_strategy(map_tap_changing_strategy(request->options().tap_changing_strategy()));
         if (request->options().err_tol() > 0.0) {
             options.set_err_tol(request->options().err_tol());
         }
