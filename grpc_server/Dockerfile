@@ -30,7 +30,7 @@ COPY power_grid_model_c ./power_grid_model_c
 RUN cmake -S . -B build -G Ninja \
         -DCMAKE_BUILD_TYPE=Release \
         -DCMAKE_INSTALL_PREFIX=/opt/power-grid-model \
-    && cmake --build build --parallel \
+    && cmake --build build --parallel 2 \
     && cmake --install build
 
 ########################################
@@ -57,7 +57,7 @@ COPY grpc_server/src ./src
 RUN cmake -S . -B build -G Ninja \
         -DCMAKE_BUILD_TYPE=Release \
         -Dpower_grid_model_DIR=/opt/power-grid-model/lib/cmake/power_grid_model \
-    && cmake --build build --parallel
+    && cmake --build build --parallel 2
 
 ########################################
 # Stage 3: grpc_health_probe, so the runtime image gets a working HEALTHCHECK without carrying curl/ca-certificates
